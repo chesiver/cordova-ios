@@ -34,6 +34,7 @@ function parseProjectFile (locations) {
     var pbxPath = locations.pbxproj;
 
     if (cachedProjectFiles[project_dir]) {
+        cachedProjectFiles[project_dir].xcode.parseSync();
         return cachedProjectFiles[project_dir];
     }
 
