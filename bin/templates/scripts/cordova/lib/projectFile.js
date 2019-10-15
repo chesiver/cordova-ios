@@ -30,6 +30,9 @@ var CordovaError = require('cordova-common').CordovaError;
 var cachedProjectFiles = {};
 
 function parseProjectFile (locations) {
+
+    console.log('test test test', require.resolve('xcode'));
+
     var project_dir = locations.root;
     var pbxPath = locations.pbxproj;
 
