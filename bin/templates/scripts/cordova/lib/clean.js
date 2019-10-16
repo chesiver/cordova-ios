@@ -33,9 +33,19 @@ module.exports.run = function () {
         return Q.reject('No Xcode project found in ' + projectPath);
     }
 
-    return superspawn.spawn('xcodebuild', ['-project', projectName, '-configuration', 'Debug', '-alltargets', 'clean'], { cwd: projectPath, printCommand: true, stdio: 'inherit' })
+    /**
+    * Ideally, the build options should be read from build.json, but here the buildOption is not passed down as an parameter so we don't
+    * know where build.json is located
+    *
+    */
+    const additionalBuildOption = [
+      '-UseModernBuildSystem=NO',
+      'SWIFT_VERSION=4.2'
+    ];
+
+    return superspawn.spawn('xcodebuild', ['-project', projectName, '-configuration', 'Debug', '-alltargets', 'clean'].concat(additionalBuildOption), { cwd: projectPath, printCommand: true, stdio: 'inherit' })
         .then(function () {
-            return superspawn.spawn('xcodebuild', ['-project', projectName, '-configuration', 'Release', '-alltargets', 'clean'], { cwd: projectPath, printCommand: true, stdio: 'inherit' });
+            return superspawn.spawn('xcodebuild', ['-project', projectName, '-configuration', 'Release', '-alltargets', 'clean'].concat(additionalBuildOption), { cwd: projectPath, printCommand: true, stdio: 'inherit' });
         }).then(function () {
             return shell.rm('-rf', path.join(projectPath, 'build'));
         });
